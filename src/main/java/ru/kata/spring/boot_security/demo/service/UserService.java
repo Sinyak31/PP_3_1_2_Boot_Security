@@ -9,6 +9,7 @@ import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,11 @@ public class UserService {
         Optional<User> user = repository.findByUsername(name);
         return user;
     }
+    public Optional<User> findByEmail(String email) {
+        Optional<User> user = repository.findByEmail(email);
+        return user;
+    }
+
 
     public void deleteUser(long id) {
         repository.deleteById(id);
@@ -48,6 +54,7 @@ public class UserService {
         List<Role> roles = roleRepository.findAllById(roleIds);
         userUpdate.setRoleList(new HashSet<>(roles));
         repository.save(userUpdate);
+
 
 
     }

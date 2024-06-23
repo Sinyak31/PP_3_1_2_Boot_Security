@@ -16,12 +16,15 @@
   <input type="text" th:field="*{age}" name="age" id="age" placeholder="Введите возраст">
   <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">error</div>
   <br>
+  <input type="email" th:field="*{email}" name="email" id="email" placeholder="Введите email">
+  <div style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">error</div>
+  <br>
   <input type="password" th:field="*{password}" name="password" id="password" placeholder="Введите пароль">
   <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">error</div>
   <br>
   <div th:each="role : ${allRoles}">
     <input type="checkbox" th:text="${role.getAuthority()}" th:value="${role.getId()}" th:id="'role_' + ${role}" name="selectedRoles"/>
-    <label th:for="'role_' + ${role}" th:text="${role}"></label><br/>
+    <label th:for="'role_' + ${role}"></label><br/>
   </div>
 
   <input type="submit" value="Сохранить">

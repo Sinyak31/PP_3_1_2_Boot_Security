@@ -7,10 +7,12 @@
 <body>
 <div th:object="${user}">
   <h3 style="color: red">Информация о пользователе</h3>
-  <span th:text="'id:'+${user.getId()}"></span><br>
+<!--  <span th:text="'id:'+${user.getId()}"></span><br>-->
   <span th:text="'name:'+${user.getUsername()}"></span><br>
   <span th:text="'surname:'+${user.getSurname()}"></span><br>
   <span th:text="'age:'+${user.getAge()}"></span><br>
+  <span th:text="'email:'+${user.getEmail()}"></span><br>
+  <span th:text="'role:'+${user.getAuthorities()}"></span><br>
   <a th:href="@{/logout}">
     <button>Выйти</button>
   </a>

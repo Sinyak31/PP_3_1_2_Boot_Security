@@ -1,14 +1,15 @@
 package ru.kata.spring.boot_security.demo.entity;
 
 
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.Cascade;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -23,6 +24,9 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "Users")
+@Getter
+@Setter
+@ToString
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +42,10 @@ public class User implements UserDetails {
     @Column(name = "age")
     @Min(value = 0, message = "Возраст не может быть отрицательным")
     private int age;
+
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "password")
     @Size(min = 3 ,message = "Должно быть минимум 3 символа")
     private String password;
@@ -49,69 +57,12 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String name, String surname, int age, String password) {
+    public User(String name, String surname, int age, String password,String email) {
         this.username = name;
         this.surname = surname;
         this.age = age;
         this.password = password;
-    }
-
-
-
-    public void setUsername(String name) {
-        this.username = name;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Set<Role> getRoleList() {
-        return roleList;
-    }
-
-    public void setRoleList(Set<Role> roleList) {
-        this.roleList = roleList;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", surname='" + surname + '\'' +
-                ", age=" + age +
-                ", password='" + password + '\'' +
-                ", roleList=" + roleList +
-                '}';
+        this.email = email;
     }
 
     @Override
@@ -125,10 +76,6 @@ public class User implements UserDetails {
     public boolean isAccountNonExpired() {
         return true;
     }
-//    @Override
-//    public String getUsername() {
-//        return username;
-//    }
 
     @Override
     public String getPassword() {

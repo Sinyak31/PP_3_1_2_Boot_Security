@@ -33,7 +33,7 @@ public class AdminController {
                            @RequestParam("selectedRoles") List<Long> selectedRoles) {
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "admin/AddUser";
+            return "/admin/AddUser";
         }
         userService.saveUserWithRoles(user, selectedRoles);
         return "redirect:/admin/index";

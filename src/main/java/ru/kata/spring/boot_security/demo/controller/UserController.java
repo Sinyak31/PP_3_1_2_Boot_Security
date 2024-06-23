@@ -30,7 +30,7 @@ public class UserController {
     @GetMapping("/show")
     public String showUser(Model model, Principal principal) {
         UserDetails userDetails = (UserDetails) ((Authentication) principal).getPrincipal();
-        Optional<User> user = userService.findByUsername(userDetails.getUsername());
+        Optional<User> user = userService.findByEmail(userDetails.getUsername());
         model.addAttribute("user", user.orElse(null));
         return "user/showUser";
     }

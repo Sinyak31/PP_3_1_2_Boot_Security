@@ -24,19 +24,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.handler = handler;
     }
 
-//    private final UserDetailServiceImp userDetailServiceImp;
-//private final AuthProvider authProvider;
-//
-//    public WebSecurityConfig(AuthProvider authProvider) {
-//        this.authProvider = authProvider;
-//    }
-
-
-//    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
-//        this.successUserHandler = successUserHandler;
-//    }
-
-
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailServiceImp)
                 .passwordEncoder(getPasswordEncoder());
@@ -47,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/auth/**", "/error").permitAll()
+                .antMatchers("/login", "/error").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

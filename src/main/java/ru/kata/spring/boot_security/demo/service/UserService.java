@@ -48,9 +48,10 @@ public class UserService {
     public void updateUser(User user,List<Long> roleIds) {
         User userUpdate = repository.findById(user.getId()).orElse(null);
         userUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
-        userUpdate.setUsername(user.getUsername());
+        userUpdate.setUsername(user.getUserName());
         userUpdate.setSurname(user.getSurname());
         userUpdate.setAge(user.getAge());
+        userUpdate.setEmail(user.getEmail());
         List<Role> roles = roleRepository.findAllById(roleIds);
         userUpdate.setRoleList(new HashSet<>(roles));
         repository.save(userUpdate);
@@ -67,7 +68,6 @@ public class UserService {
         savedUser.setRoleList(new HashSet<>(roles));
         repository.save(savedUser);
     }
-
 
 
     public User getUserById(Long id) {

@@ -6,7 +6,7 @@
 </head>
 <body>
 <form th:action="@{/admin/save/}" th:method="post" th:object="${user}">
-    <input type="text" th:field="*{username}" name="name" id="name" placeholder="Введите имя">
+    <input type="text" th:field="*{username}" name="username" id="username" placeholder="Введите имя">
 
     <div style="color: red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">error</div>
     <br>

@@ -3,9 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<table class="table" border="1px">
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container d-flex justify-content-between">
+        <div class="d-flex">
+            <span th:text="${user.getUsername()}" style="color: aliceblue"></span>
+
+            <pre style="color: aliceblue"> with roles: </pre>
+            <span th:text="${user.getAuthorities()}" style="color: aliceblue"></span>
+        </div>
+        <a th:href="@{/logout}">
+            Logout
+        </a>
+    </div>
+</nav>
+<div class="container">
+
+       <table class="table" border="1px">
     <tr>
         <th>id</th>
         <th>name</th>
@@ -18,7 +37,7 @@
     <tr th:each="users:${usersList}">
         <td th:name="id" th:text="${users.getId()}">
         </td>
-        <td th:text="${users.getUsername()}"></td>
+        <td th:text="${users.getUserName()}"></td>
         <td th:text="${users.getSurname()}"></td>
         <td th:text="${users.getAge()}"></td>
         <td th:text="${users.getEmail()}"></td>

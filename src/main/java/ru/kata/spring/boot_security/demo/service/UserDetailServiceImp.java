@@ -17,6 +17,7 @@ import java.util.Optional;
 public class UserDetailServiceImp implements UserDetailsService {
 
     private final UserRepository userRepository;
+
     @Autowired
     public UserDetailServiceImp(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -24,15 +25,13 @@ public class UserDetailServiceImp implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-       Optional<User> user = userRepository.findByUsername(name);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
 
-        if(user.isEmpty()){
-            throw  new UsernameNotFoundException("User not found");
-        }
-        User user1 = user.get();
-        user1.getAuthorities();
-        return user1 ;
-        }
+        return user.get();
     }
+}
 

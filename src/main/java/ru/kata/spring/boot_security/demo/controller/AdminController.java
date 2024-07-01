@@ -1,17 +1,23 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
@@ -33,11 +39,15 @@ public class AdminController {
                            @RequestParam("selectedRoles") List<Long> selectedRoles) {
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "admin/AddUser";
+            return "/admin/AddUser";
         }
         userService.saveUserWithRoles(user, selectedRoles);
-        return "redirect:/admin/index";
+
+        return "redirect:/admin";
     }
+
+
+
 
     @GetMapping("/addUser")
     public String addUser(Model model) {
@@ -46,16 +56,18 @@ public class AdminController {
         return "admin/AddUser";
     }
 
-    @GetMapping("/index")
-    public String getUsers(Model model) {
+    @GetMapping()
+    public String getUsers(Model model, @AuthenticationPrincipal User user) {
+        model.addAttribute("user", user);
         model.addAttribute("usersList", userService.findAll());
-        return "admin/Users";
+        model.addAttribute("roles", roleService.findAll());
+        return "admin/Admin";
     }
 
-    @GetMapping(value = "/remove")
+    @PostMapping(value = "/remove")
     public String removeUser(@RequestParam(value = "id") long id) {
         userService.deleteUser(id);
-        return "redirect:index";
+        return "redirect:/admin";
     }
 
     @GetMapping("/edit")
@@ -72,6 +84,11 @@ public class AdminController {
             return "admin/EditUser";
         }
         userService.updateUser(user, selectedRoles);
-        return "redirect:index";
+        return "redirect:/admin";
+    }
+
+    @ModelAttribute("roles")
+    public List<Role> getRoles() {
+        return roleService.findAll();
     }
 }

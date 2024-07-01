@@ -1,23 +1,45 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>.table td form {
+        height: 15px;
+    }
+
+    form  {
+        height: 30px;
+        width: 300px;
+        margin: 0 auto;
+    }
+    </style>
 </head>
-<body>
-<form name="f" method="post" action="/process_login">
-  <label for="username">Введите имя пользователя: </label>
-  <input type="text" name="username" id="username"><br>
-  <label for="password">Введите имя пользователя: </label>
-  <input type="password" name="password" id="password"><br>
-  <input type="submit" value="Login"/>
-    <a th:href="@{/auth/reg}">Зарегистрироваться</a>
 
-  <div th:if="${param.error}" style="color: red">
+<body class="pt-5">
 
-  </div>
+<div class="col-4 mx-auto">
 
-</form>
+    <main>
+        <form class="form-horizontal" role="form" method="POST" action="/process_login">
+            <h1 class="h3 mb-3 fw-bold text-left">Please sign in</h1>
+
+            <div class="form-floating">
+                <input type="email" class="form-control" name="email" id="floatingInput" placeholder="name@example.com" style="height: 50px">
+                <label for="floatingInput" class="text-muted d-flex align-items-center">Email address</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control d-flex align-items-center" name="password" id="floatingPassword" placeholder="Password" style="height: 50px">
+                <label for="floatingPassword" class="text-muted d-flex align-items-center">Password</label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary mt-2" type="submit">Sign in</button>
+            <div th:if="${param.error}" style="color: red">
+                Incorrect Email or Password
+            </div>
+        </form>
+    </main>
+</div>
+
 
 </body>
 </html>

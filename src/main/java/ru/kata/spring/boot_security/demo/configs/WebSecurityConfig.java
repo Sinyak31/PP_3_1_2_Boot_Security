@@ -24,19 +24,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.handler = handler;
     }
 
-//    private final UserDetailServiceImp userDetailServiceImp;
-//private final AuthProvider authProvider;
-//
-//    public WebSecurityConfig(AuthProvider authProvider) {
-//        this.authProvider = authProvider;
-//    }
-
-
-//    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
-//        this.successUserHandler = successUserHandler;
-//    }
-
-
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailServiceImp)
                 .passwordEncoder(getPasswordEncoder());
@@ -46,14 +33,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/admin/**").permitAll()
-                .antMatchers("/auth/**", "/error").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/**").hasAnyRole("USER","ADMIN")
+                .antMatchers("/login", "/error").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .successHandler(handler)
+                .formLogin().loginPage("/login")
                 .loginProcessingUrl("/process_login")
-                .failureUrl("/auth/login?error");
+                .usernameParameter("email")
+                .failureUrl("/auth/login?error")
+                .successHandler(handler).permitAll()
+                .and()
+                .logout().logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .permitAll();
+
+
 
     }
     @Bean

@@ -1,26 +1,20 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
-@Controller
-@RequestMapping("/admin")
+@RestController
+@RequestMapping("/api/admin")
 public class AdminController {
 
     private final UserService userService;
@@ -34,61 +28,40 @@ public class AdminController {
         this.userValidator = userValidator;
     }
 
-    @PostMapping("/save")
-    public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
-                           @RequestParam("selectedRoles") List<Long> selectedRoles) {
-        userValidator.validate(user, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "/admin/AddUser";
-        }
-        userService.saveUserWithRoles(user, selectedRoles);
 
-        return "redirect:/admin";
+    @PostMapping("/users")
+    public ResponseEntity<User> addUser(@RequestBody @Valid User user) {
+        userService.saveUserWithRoles(user);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-
-
-
-    @GetMapping("/addUser")
-    public String addUser(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("allRoles", roleService.findAll());
-        return "admin/AddUser";
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getUsers() {
+        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping()
-    public String getUsers(Model model, @AuthenticationPrincipal User user) {
-        model.addAttribute("user", user);
-        model.addAttribute("usersList", userService.findAll());
-        model.addAttribute("roles", roleService.findAll());
-        return "admin/Admin";
+    @GetMapping("/userAuth")
+    public ResponseEntity<User> getUser(@AuthenticationPrincipal User user) {
+        System.out.println(user);
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/remove")
-    public String removeUser(@RequestParam(value = "id") long id) {
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<HttpStatus> removeUser(@PathVariable("id") long id) {
         userService.deleteUser(id);
-        return "redirect:/admin";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/edit")
-    public String showEditUser(Model model, @RequestParam(value = "id") long id) {
-        model.addAttribute("user", userService.getUserById(id));
-        model.addAttribute("allRoles", roleService.findAll());
-        return "admin/EditUser";
+
+    @PutMapping("/users")
+    public ResponseEntity<User> editUser(@RequestBody @Valid User user) {
+        userService.updateUser(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping("/editUser")
-    public String editUser(@ModelAttribute("user") @Valid User user
-            , BindingResult bindingResult, @RequestParam("selectedRoles") List<Long> selectedRoles) {
-        if (bindingResult.hasErrors()) {
-            return "admin/EditUser";
-        }
-        userService.updateUser(user, selectedRoles);
-        return "redirect:/admin";
-    }
-
-    @ModelAttribute("roles")
-    public List<Role> getRoles() {
-        return roleService.findAll();
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable long id) {
+        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 }

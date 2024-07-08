@@ -11,13 +11,18 @@ import java.util.List;
 public class RoleService {
 
     private final RoleRepository repository;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public RoleService(RoleRepository repository) {
+    public RoleService(RoleRepository repository, RoleRepository roleRepository) {
         this.repository = repository;
+        this.roleRepository = roleRepository;
     }
 
     public List<Role> findAll(){
         return repository.findAll();
     }
+public Role getByRole(String role){
+        return roleRepository.getByRole(role);
+}
 }

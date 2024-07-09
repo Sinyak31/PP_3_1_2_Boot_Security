@@ -3,7 +3,6 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.DTO.UserDTO;
 import ru.kata.spring.boot_security.demo.entity.User;
@@ -26,44 +25,40 @@ public class AdminController {
     }
 
 
-    @PostMapping("/users")
+    @PostMapping()
     public ResponseEntity<UserDTO> addUser(@RequestBody @Valid UserDTO user) {
         userService.saveUserWithRoles(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @GetMapping("/users")
+    @GetMapping()
     public ResponseEntity<List<User>> getUsers() {
-        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+        List<User> users = userService.findAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/userAuth")
-    public ResponseEntity<User> getUser(@AuthenticationPrincipal User user) {
-        System.out.println(user);
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> removeUser(@PathVariable("id") long id) {
         userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
+    @PutMapping()
+    public ResponseEntity<HttpStatus> editUser(@RequestBody @Valid UserDTO user) {
+        System.out.println(user);
+        userService.updateUser(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-    @PutMapping("/users")
-    public ResponseEntity<UserDTO> editUser(@RequestBody @Valid UserDTO user) {
-        userService.updateUser(user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable long id) {
         if (userService.getUserById(id) == null) {
             throw new EntityNotFoundException("There is no user with id=" + id);
         }
-       UserDTO user = userService.getUserById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUserById(id),HttpStatus.OK);
     }
 
     @ExceptionHandler

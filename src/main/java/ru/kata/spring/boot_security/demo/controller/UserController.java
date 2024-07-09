@@ -2,23 +2,22 @@ package ru.kata.spring.boot_security.demo.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
 import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
-import ru.kata.spring.boot_security.demo.service.UserDetailServiceImp;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
-import java.security.Principal;
-import java.util.Optional;
 
 
-@RequestMapping(value = "/users")
-@Controller
+
+@RequestMapping(value = "/api/user")
+@RestController
 public class UserController {
     private final UserService userService;
     private final RoleService roleService;
@@ -30,13 +29,9 @@ public class UserController {
     }
 
 
-    @GetMapping("/show")
-    public String showUser(Model model, Principal principal) {
-        UserDetails userDetails = (UserDetails) ((Authentication) principal).getPrincipal();
-        Optional<User> user = userService.findByEmail(userDetails.getUsername());
-        model.addAttribute("user", user.orElse(null));
-        model.addAttribute("roles", roleService.findAll());
-        return "user/showUser";
+    @GetMapping()
+    public ResponseEntity<User> getUser(@AuthenticationPrincipal User user) {
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 

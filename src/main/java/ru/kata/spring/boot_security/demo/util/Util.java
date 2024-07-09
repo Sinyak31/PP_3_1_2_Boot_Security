@@ -32,9 +32,9 @@ private final RoleService roleService;
 
         // для входа
         userService.saveUserWithRoles(new User("admin", "admin", 30, "234065", "admin@mail.com"),
-                new HashSet<Role>(Set.of(roleAdmin)));
-        System.out.println("добавилась роль " + roleAdmin);
+                new HashSet<>(Set.of(roleAdmin)));
+        System.out.println(roleAdmin);
         userService.saveUserWithRoles(new User("user", "user", 31, "234065", "user@mail.com"),
-                new HashSet<Role>(Set.of(roleUser)));
+                new HashSet<>(Set.of(roleUser)));
     }
 }

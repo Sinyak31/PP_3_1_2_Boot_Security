@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+
+<body>
+<!--Navbar-->
+<header>
+    <nav class="navbar navbar-dark bg-dark p-0 shadow ">
+        <div class="nav-item text-white px-3">
+            <span id="currentUserEmailNavbar"></span>
+        </div>
+        <ul class="navbar-nav">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link px-3" href="/logout">Logout</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container-fluid mt-3 ">
+
+    <!--Sidebar-->
+    <div class="row">
+        <div class="col-md-2 px-0">
+            <div class="d-flex flex-column flex-shrink-0 p-0 text-white">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a href="#admin-panel" data-bs-toggle="pill" class="nav-link active no-refresh" role="tab" aria-current="true">
+                            Admin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#userInfo" data-bs-toggle="pill" class="nav-link no-refresh" role="tab" aria-current="false">
+                            User
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="col-md-10 bg-light">
+            <div class="tab-content">
+
+                <!--Admin Panel-->
+                <div class="tab-pane fade show active" id="admin-panel" role="tabpanel">
+                    <div class="container-fluid">
+                        <h2>Admin Panel</h2>
+                        <ul class="nav nav-tabs border-bottom-0">
+                            <li class="nav-item">
+                                <a href="#users-table" id="show-users-table" class="nav-link active no-refresh"
+                                   data-bs-toggle="tab" aria-current="true" role="tab">
+                                    Users Table</a>
+                            </li>
+                            <li>
+                                <a href="#newUserForm" id="show-new-user-form" class="nav-link no-refresh"
+                                   data-bs-toggle="tab" aria-current="false" role="tab">
+                                    New User</a>
+                            </li>
+                        </ul>
+
+                        <!--User table-->
+                        <div class="tab-content">
+                            <div id="users-table" class="tab-pane fade show active">
+                                <div class="card">
+                                    <div class="container-fluid px-0 bg-light border t">
+                                        <h5 class="card-header">
+                                            All users</h5>
+                                    </div>
+
+                                    <div class="container-fluid mt-4">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped bg-white">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Name</th>
+                                                        <th>Surname</th>
+                                                        <th>Age</th>
+                                                        <th>Email</th>
+                                                        <th>Role</th>
+                                                        <th>Edit</th>
+                                                        <th>Delete</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="usersTable">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--new User-->
+                            <div class="tab-pane fade" id="newUserForm" role="form">
+                                <div class="card">
+                                    <div class="container-fluid px-0">
+                                        <h5 class="card-header">
+                                            Add new user</h5>
+                                    </div>
+                                    <div class="card-body col-5 mx-auto text-center mt-3">
+                                        <form id="newUser">
+                                            <label for="firstName" class="form-label fw-bold mb-0">First name</label>
+                                            <input type="text" class="form-control" id="firstName" placeholder="First name">
+                                            <span id="nameError" class="text-danger"></span>
+                                            <br>
+                                            <label for="lastName" class="form-label fw-bold mb-0">Last name</label>
+                                            <input type="text" class="form-control" id="lastName" placeholder="Last name">
+                                            <span id="surnameError" class="text-danger"></span>
+                                            <br>
+                                            <label for="age" class="form-label fw-bold mb-0">Age</label>
+                                            <input type="number" class="form-control" id="age" placeholder="Age">
+                                            <span id="ageError" class="text-danger"></span>
+                                            <br>
+                                            <label for="email" class="form-label fw-bold mb-0">Email</label>
+                                            <input type="text" class="form-control" id="email" placeholder="Email">
+                                            <span id="emailError" class="text-danger"></span>
+                                            <br>
+                                            <label for="password" class="form-label fw-bold mb-0">Password</label>
+                                            <input type="text" class="form-control" id="password" placeholder="Password">
+                                            <span id="passwordError" class="text-danger"></span>
+                                            <br>
+                                            <label for="roles" class="form-label fw-bold mb-0">Role</label>
+                                            <select class="form-select" id="roles" size="2" multiple="multiple" name="rolesForController">
+                                                <option value="ROLE_USER">USER</option>
+                                                <option value="ROLE_ADMIN">ADMIN</option>
+                                            </select>
+                                            <br>
+                                            <div>
+                                                <button type="submit" class="btn btn-success">Add new user</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                    <!--CurrentUser info-->
+                <div class="tab-pane fade" id="userInfo" role="tabpanel">
+                    <div class="container-fluid">
+                        <h2>User Information Page</h2>
+                        <div class="card">
+                            <div class="container-fluid px-0 bg-light border">
+                                <h5 class="card-header">
+                                    About user</h5>
+                            </div>
+                            <div class="container-fluid mt-4">
+                                <div class="table-responsive">
+                                    <table class="table table-striped bg-white">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Age</th>
+                                            <th>email</th>
+                                            <th>Role</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="currentUserTable">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--delete-->
+<div class="modal fade" id="deleteModal" tabindex="-1"
+     aria-labelledby="delete" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete user</h4>
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="card-body text-center">
+                <form id="modalBodyDelete">
+                    <div class="modal-body col-7 mx-auto text-center">
+                        <label for="idDelete" class="form-label fw-bold mb-0">ID</label>
+                        <input type="text" class="form-control" id="idDelete" data-user-id="id" readonly>
+                        <br>
+                        <label for="firstNameDelete" class="form-label fw-bold mb-0">First name</label>
+                        <input type="text"  class="form-control" id="firstNameDelete" data-user-id="firstName"  readonly>
+                        <br>
+                        <label for="lastNameDelete" class="form-label fw-bold mb-0">Last name</label>
+                        <input type="text" class="form-control" id="lastNameDelete" data-user-id="lastName"  readonly>
+                        <br>
+                        <label for="ageDelete" class="form-label fw-bold mb-0">Age</label>
+                        <input type="text" class="form-control" id="ageDelete" data-user-id="age"  readonly>
+                        <br>
+                        <label for="emailDelete" class="form-label fw-bold mb-0">Email</label>
+                        <input type="text"  class="form-control" id="emailDelete" data-user-id="email"  readonly>
+                        <br>
+                        <label for="rolesDelete" class="form-label fw-bold mb-0">Role</label>
+                        <select class="form-select" id="rolesDelete" data-user-id="rolesDelete"  size="2" multiple="multiple" disabled>
+                        </select>
+                        <br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close</button>
+                        <button type="submit" class="btn btn-danger" >
+                            Delete
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--edit-->
+<div class="modal fade" id="editModal" tabindex="-1"
+     aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit user</h4>
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="card-body text-center">
+                <form id="modalBodyEdit">
+                    <div class="modal-body col-7 mx-auto text-center">
+                        <label for="idEdit" class="form-label fw-bold mb-0">ID</label>
+                        <input type="text" class="form-control" id="idEdit" data-user-id="id" readonly>
+                        <br>
+                        <label for="firstNameEdit" class="form-label fw-bold mb-0">First name</label>
+                        <input type="text"  class="form-control" id="firstNameEdit" data-user-id="firstName">
+                        <br>
+                        <label for="lastNameEdit" class="form-label fw-bold mb-0">Last name</label>
+                        <input type="text" class="form-control" id="lastNameEdit" data-user-id="lastName">
+                        <br>
+                        <label for="ageEdit" class="form-label fw-bold mb-0">Age</label>
+                        <input type="text" class="form-control" id="ageEdit" data-user-id="age">
+                        <br>
+                        <label for="emailEdit" class="form-label fw-bold mb-0">Email</label>
+                        <input type="text"  class="form-control" id="emailEdit" data-user-id="email">
+                        <br>
+                        <label for="passwordEdit" class="form-label fw-bold mb-0">Password</label>
+                        <input type="password"  class="form-control" id="passwordEdit" data-user-id="password">
+                        <br>
+                        <label for="rolesEdit" class="form-label fw-bold mb-0">Role</label>
+                        <select class="form-select" id="rolesEdit" data-user-id="rolesEdit"  size="2" multiple="multiple">
+                        </select>
+                        <br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close</button>
+                        <button type="submit" class="btn btn-primary" >
+                            Edit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/app.js"></script>
+<script src="/js/fillTables.js"></script>
+<script src="/js/addUser.js"></script>
+<script src="/js/fillModal.js"></script>
+<script src="/js/deleteUser.js"></script>
+<script src="/js/editUser.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</body>
+</html>

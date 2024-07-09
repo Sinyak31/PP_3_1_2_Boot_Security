@@ -1,7 +1,6 @@
 package ru.kata.spring.boot_security.demo.entity;
 
 
-import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,11 +10,18 @@ import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Column;
+import javax.persistence.ManyToMany;
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
 import javax.validation.constraints.*;
-
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,7 +33,6 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @ToString
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,7 +59,6 @@ public class User implements UserDetails {
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @JsonIgnore
     private Set<Role> roleList;
 
 
@@ -64,11 +68,6 @@ public class User implements UserDetails {
         this.age = age;
         this.password = password;
         this.email = email;
-    }
-
-
-    public String getUserName() {
-        return username;
     }
 
 
@@ -86,7 +85,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
